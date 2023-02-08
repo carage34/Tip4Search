@@ -33,39 +33,31 @@ function getVods() {
     });
 }
 
-function loadSong(vods) {
-    let songs = [];
-    let promise = [];
-    let lastDate = new Date(JSON.parse(fs.readFileSync('./lastDate.txt')));
-    console.log(lastDate);
-    const vods_reverse = vods.reverse();
-    vods_reverse.forEach((vod) => {
-        const date = new Date(vod.created_at);
-        if(date.getTime() > lastDate.getTime()) {
-            if(date.getDay() === 0) {
-                let video = new schemaVideo({
-                    _id: new mongoose.Types.ObjectId,
-                    name: vod.title,
-                    thumbnail: vod.thumbnail_url,
-                    postedAt: vod.created_at,
+async function loadSong(vods) {
+        let promise = [];
+        let lastDate = new Date(JSON.parse(fs.readFileSync('./lastDate.txt')));
+        console.log(lastDate);
+        const vods_reverse = vods.reverse();
+        for (let i =0; i< vods_reverse.length; i++) {
+            let date = new Date(vods_reverse[i].created_at);
+            if(date.getTime() > lastDate.getTime() && date.getDay() === 0) {
+                    console.log(vods_reverse[i].created_at);
+                    let video = new schemaVideo({
+                        _id: new mongoose.Types.ObjectId,
+                        name: vods_reverse[i].title,
+                        thumbnail: vods_reverse[i].thumbnail_url,
+                        postedAt: vods_reverse[i].created_at,
 
-                });
-                video.save().then((res) => {
-                    console.log("Video ajouté ", res.id)
-                    fs.writeFileSync('./lastDate.txt', JSON.stringify(vod.created_at));
-                    promise.push(loadChat(vod.id, res.id));
-                }).catch((err) => {
-                    console.error('Erreur de connexion à la base', err.reason)
-                })
+                    });
+                    let res = await video.save();
+                    fs.writeFileSync('./lastDate.txt', JSON.stringify(vods_reverse[i].created_at));
+                    await loadChat(vods_reverse[i].id, res.id, vods_reverse[i].created_at);
             }
         }
-    });
-    Promise.all(promise).then((values) => {
-        mongoose.disconnect();
-    });
+        await mongoose.disconnect();
 }
 
-async function loadChat(videoid, mongoid) {
+async function loadChat(videoid, mongoid, vodDate) {
     let messages = [];
     let hasNextPage = true;
     let cursor = null;
@@ -115,10 +107,12 @@ async function loadChat(videoid, mongoid) {
         messages.push(...comments);
         cursor = comments[0].cursor;
 
-    }
+    };
     let winner = "";
     let francis = ""
     let songTimestamp = [];
+    let promises = [];
+    // messages = JSON.parse(fs.readFileSync('./store.json'));
     messages.forEach((comment) => {
         cursor = comment.cursor;
         if (comment.node.commenter && comment.node.commenter.displayName === 'Robot_Francis' && comment.node.message.fragments[0].text.includes('tu peux choisir un morceau')) {
@@ -132,16 +126,18 @@ async function loadChat(videoid, mongoid) {
             let winnerMessages = messages.filter(comment => comment.node.commenter && comment.node.commenter.displayName === winner && comment.node.contentOffsetSeconds >= francis.offsetSeconds);
             let winnerMessageSorted = winnerMessages.map(comment => comment.node.message.fragments).slice(0, 5);
             songTimestamp.push({francis: francis, winner: {winnerMessages: winnerMessageSorted}});
+
             let message = new schemaMessage({
                 _id: new mongoose.Types.ObjectId,
                 video: mongoid,
-                winner:winnerMessageSorted.flat().map(message => message.text)
+                winner:winnerMessageSorted.flat().map(message => message.text),
+                postedAt: winnerMessages[0] && winnerMessages[0].node ? winnerMessages[0].node.createdAt : null,
+                offsetSeconds: winnerMessages[0] && winnerMessages[0].node ? winnerMessages[0].node.contentOffsetSeconds : null
             });
-            message.save().then((res) => {console.log("Message ajouté")}).catch((err) => {
-                console.error('Erreur de connexion à la base', err.reason)
-            })
-
+            promises.push(message.save());
         }
-    })
-    return songTimestamp;
+    });
+    Promise.all(promises).then(values => {
+        return songTimestamp;
+    });
 }

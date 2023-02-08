@@ -10,6 +10,8 @@ let Message = new Schema({
         ref: "Video"
     },
     winner:  [String],
+    postedAt: Date,
+    offsetSeconds: Number,
     done: { type: Boolean, default: false },
     song : {
         type: mongoose.Types.ObjectId,
