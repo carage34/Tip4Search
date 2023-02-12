@@ -1,9 +1,10 @@
 import {default as bodyParser} from 'body-parser';
 import {default as cors} from 'cors';
 import {default as mongoose} from 'mongoose';
-import {default as path} from 'path';
 import {default as express} from 'express';
 import {messageRouter} from './routes/message.route.js'
+import {videoRouter} from './routes/video.route.js'
+import {songRouter} from './routes/song.route.js'
 
 // Connexion à mongoDB
 mongoose
@@ -25,6 +26,8 @@ app.use(
 )
 app.use(cors())
 app.use('/messages', messageRouter);
+app.use('/videos', videoRouter);
+app.use('/songs', songRouter);
 app.use('/api', (req, res) => {
     res.send("api working");
 })
