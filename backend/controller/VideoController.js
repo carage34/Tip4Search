@@ -3,15 +3,15 @@ import mongoose, { Schema } from 'mongoose';
 
 const routes = {
     getVideos: (req, res) => {
-        schemaVideo.find()
+        schemaVideo.find().populate({path: 'messages'})
             .then((videos) => {
                 res.status(200).json(videos);
             })
-            .catch(() => res.status(500).send("Impossible de récupérer les messages"));
+            .catch((reason) => res.status(500).send("Impossible de récupérer les messages " + reason));
     },
 
     getVideoById: (req, res) => {
-        schemaVideo.findById(req.params.id)
+        schemaVideo.findById(req.params.id).populate({path: 'messages', model: 'Message'})
             .then(videos => res.status(200).json({videos: videos}))
             .catch(() => res.status(500).send('Impossible de récupérer les videos'));
     }

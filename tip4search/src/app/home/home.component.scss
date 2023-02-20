@@ -1,0 +1,53 @@
+
+.example-card {
+  width: 400px;
+  margin-top: 5px;
+}
+
+body {
+  background: rgb(2,0,36);
+}
+
+
+
+mat-card {
+  background: #18181b;
+}
+
+mat-card-header {
+  color: white;
+}
+mat-card-subtitle {
+  color:  #adadb8;
+}
+
+h1 {
+  color: white;
+}
+
+path {
+  fill: white;
+}
+
+svg {
+  z-index: 999;
+}
+
+img {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+img.play {
+  position: absolute;
+  top: 53px;
+  left: 140px;
+ }
+
+mat-card-content {
+  background: #000000 !important;
+  position: relative;
+  top: 0;
+  left: 0;
+}

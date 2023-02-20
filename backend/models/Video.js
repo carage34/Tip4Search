@@ -13,7 +13,11 @@ let Video = new Schema({
     },
     postedAt: {
         type: Date
-    }
+    },
+    messages: [{
+        type: mongoose.Types.ObjectId,
+        ref: "Message"
+    }],
 }, {
     collection: 'videos'
 })

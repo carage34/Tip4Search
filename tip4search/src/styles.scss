@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+html, body { height: 100%; }
+body { margin: 0;  font-family: "Franklin Gothic Medium", serif !important;  background: #0e0e10;}
+
+* {
+  font-family: 'roobert', serif !important;
+}
+
+@font-face {
+  font-family: roobert;
+  src: url(assets/font/Roobert-Regular.ttf) format("opentype");
+}

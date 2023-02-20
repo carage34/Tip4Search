@@ -3,6 +3,17 @@ import mongoose, { Schema } from 'mongoose';
 
 
 const routes = {
+
+
+    getMessageToBeProcessedByVideoId:  (req, res) => {
+        schemaMessage.find({'done': false})
+            .populate({path: 'video'})
+            .then((messages) => {
+                res.status(200).json(messages);
+            })
+            .catch(() => res.status(500).send("Impossible de récupérer les messages"));
+    },
+
     getMessagesByVideoId:  (req, res) => {
         schemaMessage.find({'video': mongoose.Types.ObjectId(req.params.id)})
             .then((messages) => {
@@ -10,14 +21,6 @@ const routes = {
             })
             .catch(() => res.status(500).send("Impossible de récupérer les messages"));
     },
-
-    getMessageProcessedByVideoId:  (req, res) => {
-        schemaMessage.find({'video': mongoose.Types.ObjectId(req.params.id), 'done': true})
-            .then((messages) => {
-                res.status(200).json(messages);
-            })
-            .catch(() => res.status(500).send("Impossible de récupérer les messages"));
-    }
 }
 
 

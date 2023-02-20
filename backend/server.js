@@ -16,6 +16,11 @@ mongoose
         console.error('Erreur de connexion à la base', err.reason)
     })
 
+let corsParam = {
+    credentials: true,
+    origin: "http://localhost:4200",
+};
+
 // Configuration des routes et des ports
 const app = express()
 app.use(bodyParser.json())
@@ -24,10 +29,15 @@ app.use(
         extended: false,
     }),
 )
-app.use(cors())
-app.use('/messages', messageRouter);
-app.use('/videos', videoRouter);
-app.use('/songs', songRouter);
+app.use(cors(corsParam));
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+})
+app.use('/api/messages', messageRouter);
+app.use('/api/videos', videoRouter);
+app.use('/api/songs', songRouter);
 app.use('/api', (req, res) => {
     res.send("api working");
 })
