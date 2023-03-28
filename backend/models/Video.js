@@ -16,8 +16,19 @@ let Video = new Schema({
     },
     messages: [{
         type: mongoose.Types.ObjectId,
-        ref: "Message"
+        ref: "Message",
     }],
+
+    twitchid: {
+        type: String
+    },
+    available: {
+        type: Boolean,
+        default: false
+    },
+    youtubeid: {
+        type: String
+    }
 }, {
     collection: 'videos'
 })

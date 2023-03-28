@@ -3,8 +3,8 @@ import {default as axios} from 'axios';
 import {default as util} from 'util';
 import {default as fs} from 'fs';
 import {default as mongoose} from 'mongoose';
-import {schemaVideo} from './backend/models/Video.js'
-import {schemaMessage} from './backend/models/Message.js'
+import {schemaVideo} from './models/Video.js'
+import {schemaMessage} from './models/Message.js'
 
 
 //const results = await graphQLClient.request(query);
@@ -47,6 +47,7 @@ async function loadSong(vods) {
                         name: vods_reverse[i].title,
                         thumbnail: vods_reverse[i].thumbnail_url,
                         postedAt: vods_reverse[i].created_at,
+                        twitchid: vods_reverse[i].id
 
                     });
                     let res = await video.save();
@@ -55,6 +56,18 @@ async function loadSong(vods) {
             }
         }
         await mongoose.disconnect();
+}
+
+function requestGql(query, client) {
+    return new Promise((resolve, reject) => {
+        client.request(query).then((res) => {
+            resolve(res);
+            console.log(res);
+        }).catch((err) => {
+            console.log("err " + err);
+        })
+    })
+
 }
 
 async function loadChat(videoid, mongoid, vodDate) {
@@ -101,7 +114,8 @@ async function loadChat(videoid, mongoid, vodDate) {
         `
 
 
-        const res = await graphQLClient.request(query);
+        //const res = await graphQLClient.request(query);
+        const res = await requestGql(query, graphQLClient);
         let comments = res.video.comments.edges;
         hasNextPage = res.video.comments.pageInfo.hasNextPage;
         messages.push(...comments);
@@ -113,15 +127,16 @@ async function loadChat(videoid, mongoid, vodDate) {
     let songTimestamp = [];
     let promises = [];
     // messages = JSON.parse(fs.readFileSync('./store.json'));
-    messages.forEach((comment) => {
-        cursor = comment.cursor;
-        if (comment.node.commenter && comment.node.commenter.displayName === 'Robot_Francis' && comment.node.message.fragments[0].text.includes('tu peux choisir un morceau')) {
+    console.log(mongoid);
+    for(let i=0;i<messages.length;i++) {
+        cursor = messages[i].cursor;
+        if (messages[i].node.commenter && messages[i].node.commenter.displayName === 'Robot_Francis' && messages[i].node.message.fragments[0].text.includes('tu peux choisir un morceau')) {
             francis = {
-                text: comment.node.message.fragments[0].text,
-                postedAt: comment.node.createdAt,
-                offsetSeconds: comment.node.contentOffsetSeconds
+                text: messages[i].node.message.fragments[0].text,
+                postedAt: messages[i].node.createdAt,
+                offsetSeconds: messages[i].node.contentOffsetSeconds
             }
-            winner = comment.node.message.fragments[0].text.split(" ")[0];
+            winner = messages[i].node.message.fragments[0].text.split(" ")[0];
             winner = winner.slice(1, winner.length);
             let winnerMessages = messages.filter(comment => comment.node.commenter && comment.node.commenter.displayName === winner && comment.node.contentOffsetSeconds >= francis.offsetSeconds);
             let winnerMessageSorted = winnerMessages.map(comment => comment.node.message.fragments).slice(0, 5);
@@ -134,10 +149,21 @@ async function loadChat(videoid, mongoid, vodDate) {
                 postedAt: winnerMessages[0] && winnerMessages[0].node ? winnerMessages[0].node.createdAt : null,
                 offsetSeconds: winnerMessages[0] && winnerMessages[0].node ? winnerMessages[0].node.contentOffsetSeconds : null
             });
-            promises.push(message.save());
+           let res = await message.save();
+           await schemaVideo.findByIdAndUpdate(mongoid, {$push: {"messages": {_id: res.id}}});
         }
+    }
+    /*messages.forEach((comment) => {
+
     });
     Promise.all(promises).then(values => {
-        return songTimestamp;
-    });
+        values.map((value) => {
+            schemaVideo.findOneAndUpdate(mongoid, {$push: {"messages": {_id: value.id}}}).then((result) => {
+                console.log(result)
+            })
+                .catch((error) => {
+                    console.log(error);
+                })
+        })
+    });*/
 }

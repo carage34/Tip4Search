@@ -14,6 +14,20 @@ const routes = {
         schemaVideo.findById(req.params.id).populate({path: 'messages', model: 'Message'})
             .then(videos => res.status(200).json({videos: videos}))
             .catch(() => res.status(500).send('Impossible de récupérer les videos'));
+    },
+
+    isVod: (req, res) => {
+        schemaVideo.find({'twitchid': req.params.id})
+            .then((video) => {
+                console.log(video);
+                console.log(req.params.id);
+                if(video.length === 1) {
+                    res.status(200).json({isVOD: true});
+                } else {
+                    res.status(200).json({isVOD: false});
+                }
+            })
+            .catch(() => res.status(500).send('Impossible de récupérer les videos'));
     }
 }
 

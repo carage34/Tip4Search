@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-md-6">
+      <div class="message" *ngFor="let message of data.messageDialog" (click)="this.selected = message">
+        <b>Pseudo</b><br>
+        {{message.winner[0]}}
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+    <div class="col-md-6 winner">
+      <div *ngFor="let winnerMessage of this.selected.winner">
+        <p>{{ winnerMessage }}</p>
+      </div>
+    </div>
+</div>
+<div style="margin-left: 30%">
+  <h1>Choisir un morceau</h1>
+  <label for="artiste">Choisir un artiste</label><br>
+    <input type="text"
+           placeholder="Choisir un artiste"
+           id="artiste"
+           matInput
+           [formControl]="songControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  <br>
+
+  <label for="titre">Choisir un titre</label><br>
+  <input type="text"
+         placeholder="Choisir un titre"
+         id="titre"
+         matInput
+         [formControl]="titreControl"
+         [matAutocomplete]="autoo"><br>
+  <mat-autocomplete #autoo="matAutocomplete">
+    <mat-option *ngFor="let option of this.titre" [value]="option.name">
+      {{option.name}}
+    </mat-option>
+  </mat-autocomplete>
+
+  <button class="btn btn-primary" (click)="editMessage()">Valider</button>
+</div>
+
+

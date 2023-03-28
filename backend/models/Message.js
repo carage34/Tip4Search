@@ -7,7 +7,7 @@ let Message = new Schema({
     },
     video: {
         type: mongoose.Types.ObjectId,
-        ref: "Video"
+        ref: "Video",
     },
     winner:  [String],
     postedAt: Date,
@@ -15,7 +15,7 @@ let Message = new Schema({
     done: { type: Boolean, default: false },
     song : {
         type: mongoose.Types.ObjectId,
-        ref: "Song"
+        ref: "Song",
     }
 
 }, {

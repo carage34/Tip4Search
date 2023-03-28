@@ -1,16 +1,19 @@
 <div class="row">
-  <div class="col-md-3" *ngFor="let video of videos">
-    <mat-card class="example-card" >
+  <div class="col-md-2" *ngFor="let video of videos">
+    <mat-card class="example-card mt-5 ml-5 d-flex justify-content-center">
       <mat-card-header>
-        <mat-card-title>{{ video.name }}</mat-card-title>
-        <mat-card-subtitle>Publié le {{ video.postedAt | date : 'medium' }}</mat-card-subtitle>
+        <mat-card-title>Vod du {{ video.postedAt | date : 'short' }}</mat-card-title>
       </mat-card-header>
-      <mat-card-content>
+      <h3 class="text-center">{{ video.messages.length }} messages à traiter</h3>
+      <button class="btn btn-primary mb-3" style="width: 50%; margin-left: 25%" (click)="this.openDialog(video.messages)">Traiter</button>
+      <!--<mat-card-content class="d-flex flex-row">
+        <mat-card class="card" *ngFor="let message of video.messages">
+          <div *ngFor="let content of message.winner">
+            <p>{{ content }}</p>
+          </div>
+        </mat-card>
 
-      </mat-card-content>
-      <mat-card-actions>
-
-      </mat-card-actions>
+      </mat-card-content>-->
     </mat-card>
   </div>
 </div>

@@ -14,7 +14,7 @@ mongoose
     })
     .catch((err) => {
         console.error('Erreur de connexion à la base', err.reason)
-    })
+    });
 
 let corsParam = {
     credentials: true,

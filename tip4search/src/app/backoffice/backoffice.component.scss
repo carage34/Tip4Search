@@ -1,4 +1,24 @@
+mat-card.card {
+  background: black;
+  width: 400px;
+  color: white;
+  margin-left: 10px;
+  padding: 10px;
+  height: 300px;
+  overflow: hidden;
+}
+
 mat-card {
-  height: 154px;
-  margin-top: 25px;
+  background: #18181b;
+}
+
+mat-card-header {
+  color: white;
+}
+mat-card-subtitle {
+  color:  #adadb8;
+}
+
+h3 {
+  color: white;
 }
