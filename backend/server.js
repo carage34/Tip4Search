@@ -8,7 +8,7 @@ import {songRouter} from './routes/song.route.js'
 
 // Connexion à mongoDB
 mongoose
-    .connect(`mongodb+srv://${process.env.DB_URL}`, {user: `${process.env.DB_USER}`, pass: `${process.env.DB_USER}`, dbName: `${process.env.DB_NAME}`})
+    .connect(`mongodb+srv://${process.env.DB_URL}`, {user: `${process.env.DB_USER}`, pass: `${process.env.DB_PASSWORD}`, dbName: `${process.env.DB_NAME}`})
     .then((x) => {
         console.log(`Connecté à Mongo! Nom de la base: "${x.connections[0].name}"`)
     })
