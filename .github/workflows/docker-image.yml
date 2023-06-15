@@ -23,9 +23,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: actions/checkout@v1
+      - uses: actions/checkout@v1
+      - name: Build and push
         run: |
           docker build -t carage34/tip4search:latest
           docker push carage34/tip4search:v1
