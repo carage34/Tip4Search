@@ -28,4 +28,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: carage/tip4search:lastest
+          tags: carage/tip4search:latest
