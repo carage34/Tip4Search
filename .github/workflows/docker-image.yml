@@ -25,8 +25,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: carage/tip4search:latest
+        uses: actions/checkout@v1
+        run: |
+          docker build -t carage34/tip4search:latest
+          docker push carage34/tip4search:v1
