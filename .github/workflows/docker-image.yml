@@ -26,5 +26,5 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build and push
         run: |
-          docker build -t carage34/tip4search:latest
-          docker push carage34/tip4search:v1
+          docker build -t carage34/tip4search:latest .
+          docker push carage34/tip4search:latest
