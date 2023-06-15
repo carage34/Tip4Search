@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 
 const routes = {
     getVideos: (req, res) => {
-        schemaVideo.find().populate({path: 'messages'})
+        schemaVideo.find().populate({path: 'messages'}).sort(({postedAt: 'desc'}))
             .then((videos) => {
                 res.status(200).json(videos);
             })
@@ -21,7 +21,7 @@ const routes = {
             .then((video) => {
                 console.log(video);
                 console.log(req.params.id);
-                if(video.length === 1) {
+                if(video.length > 0) {
                     res.status(200).json({isVOD: true});
                 } else {
                     res.status(200).json({isVOD: false});
