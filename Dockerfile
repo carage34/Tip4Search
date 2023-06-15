@@ -3,12 +3,12 @@
 FROM node:18-alpine
 ENV NODE_ENV=production
 
-WORKDIR ./backend
+WORKDIR .
 
 COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install --production
 
-COPY backend .
+COPY . .
 
 CMD [ "node", "backend/server.js" ]
