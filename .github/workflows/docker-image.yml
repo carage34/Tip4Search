@@ -41,3 +41,4 @@ jobs:
         run: |-
           docker tag $IMAGE_NAME:latest europe-west9-docker.pkg.dev/$PROJECT_ID/tip4search/$IMAGE_NAME:latest
           docker push europe-west9-docker.pkg.dev/$PROJECT_ID/tip4search/$IMAGE_NAME:latest
+          
