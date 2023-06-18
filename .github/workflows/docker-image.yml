@@ -7,6 +7,9 @@ jobs:
   job_id:
     name: oui
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: tip4search
+      PROJECT_ID: jarvispi-9f43b
     steps:
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -16,9 +19,22 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
 
+      - name: Build Docker Image
+        run: docker build -t $IMAGE_NAME:latest .
+
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
       - name: Configure Docker Client
         run: |-
           gcloud auth configure-docker --quiet
           gcloud auth configure-docker europe-west9-docker.pkg.dev --quiet
+
+      - name: Push Docker Image to Container Registry (GCR)
+        run: |-
+          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+
+      - name: Push Docker Image to Artifact Registry
+        run: |-
+          docker tag $IMAGE_NAME:latest europe-west9-docker.pkg.dev/$PROJECT_ID/tip4search/$IMAGE_NAME:latest
+          docker push europe-west9-docker.pkg.dev/$PROJECT_ID/tip4search/$IMAGE_NAME:latest
