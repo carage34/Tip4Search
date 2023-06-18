@@ -1,30 +1,39 @@
-name: ci
-
+---
+name: Build and Push Python Image to Google Cloud Platform
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
+    branches: [ master ]
 jobs:
-  docker:
+  build-push-gcr:
+    name: Build and Push to GCP
     runs-on: ubuntu-latest
     env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      IMAGE_NAME: tip4search
+      PROJECT_ID: jarvispi-9f43b
     steps:
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@master
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: actions/checkout@v1
-      - name: Build and push
-        run: |
-          docker build -t carage34/tip4search:latest .
-          docker push carage34/tip4search:latest
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ env.PROJECT_ID }}
+          export_default_credentials: true
+
+      - name: Build Docker Image
+        run: docker build -t $IMAGE_NAME:latest .
+
+      - name: Configure Docker Client
+        run: |-
+          gcloud auth configure-docker --quiet
+          gcloud auth configure-docker europe-west9-docker.pkg.dev --quiet
+
+      - name: Push Docker Image to Container Registry (GCR)
+        run: |-
+          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+          docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+
+      - name: Push Docker Image to Artifact Registry
+        run: |-
+          docker tag $IMAGE_NAME:latest europe-west9-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
+          docker push europe-west9-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
