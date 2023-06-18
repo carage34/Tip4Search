@@ -5,6 +5,8 @@ on:
     branches: [ "master" ]
 jobs:
   job_id:
+    name: oui
+    runs-on: ubuntu-latest
     steps:
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
