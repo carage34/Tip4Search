@@ -20,5 +20,5 @@ jobs:
 
       - name: Build Docker Image
         run: | 
-        docker build -t carage34/tip4search:latest .
-        docker push carage34/tip4search:latest
+          docker build -t carage34/tip4search:latest .
+          docker push carage34/tip4search:latest
