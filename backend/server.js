@@ -8,17 +8,13 @@ import {songRouter} from './routes/song.route.js'
 
 import { Client, IntentsBitField } from 'discord.js';
 import { readFile } from 'fs/promises';
-const json = JSON.parse(
-    await readFile(
-        new URL('./config.json', import.meta.url)
-    )
-);
+
 const client = new Client({ intents: [IntentsBitField.Flags.Guilds] });
 
-client.login(json.token);
+client.login(process.env.TOKEN);
 client.on("ready", () => {
     console.log(`Ready to serve on ${client.guilds.size} servers, for ${client.users.size} users.`);
-    client.channels.cache.get(json.channelId).send("test");
+    client.channels.cache.get(process.env.CHANNEL_ID).send("test");
 });
 
 
