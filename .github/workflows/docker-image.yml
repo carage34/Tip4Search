@@ -20,5 +20,5 @@ jobs:
 
       - name: Build Docker Image
         run: | 
-          docker build -t carage34/tip4search:latest --build-arg TOKEN=${{ secrets.TOKEN }} --build-arg GUILD_ID=${{ secrets.GUILD_ID }} --build-arg CLIENT_ID=${{ secrets.CLIENT_ID }} --build-arg CLIENTID_TWITCH=${{ secrets.CLIENTID_TWITCH }} --build-arg TOKEN_TWITCH=${{ secrets.TOKEN_TWITCH }} --build-arg CLIENTINTE=${{ secrets.CLIENTINTE }} --build-arg CLIENTIDGQL=${{ secrets.CLIENTIDGQL }} --build-arg YOUTUBE_API=${{ secrets.YOUTUBE_API }} --build-arg CHANNEL_ID=${{ secrets.CHANNEL_ID }} .
-          docker push carage34/tip4search:latest
+           docker build --build-arg TOKEN=${{ secrets.TOKEN }} --build-arg GUILD_ID=${{ secrets.GUILD_ID }} --build-arg CLIENT_ID=${{ secrets.CLIENT_ID }} --build-arg CHANNEL_ID=${{ secrets.CHANNEL_ID }} -t carage34/tip4search:latest .
+            docker push carage34/tip4search:latest
