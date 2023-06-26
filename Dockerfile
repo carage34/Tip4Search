@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM node:18-alpine
-RUN apt-get update && apt-get -y install cron
+RUN apk add --update cron
 ARG TOKEN
 ARG GUILD_ID
 ARG CLIENT_ID
