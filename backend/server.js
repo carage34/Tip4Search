@@ -6,25 +6,21 @@ import {messageRouter} from './routes/message.route.js'
 import {videoRouter} from './routes/video.route.js'
 import {songRouter} from './routes/song.route.js'
 
+
 import { Client, IntentsBitField } from 'discord.js';
 import { readFile } from 'fs/promises';
-const json = JSON.parse(
-    await readFile(
-        new URL('./config.json', import.meta.url)
-    )
-);
 const client = new Client({ intents: [IntentsBitField.Flags.Guilds] });
 
-client.login(json.token);
+client.login(process.env.TOKEN);
 client.on("ready", () => {
     console.log(`Ready to serve on ${client.guilds.size} servers, for ${client.users.size} users.`);
-    client.channels.cache.get(json.channelId).send("test");
+    client.channels.cache.get(process.env.CHANNEL_ID).send("test");
 });
 
 
 // Connexion à mongoDB
 mongoose
-    .connect(`mongodb://mongodb:27017`, {user: `${process.env.DB_USER}`, pass: `${process.env.DB_PASSWORD}`, dbName: `${process.env.DB_NAME}`})
+    .connect(`${process.env.MONGO_URI}`)
     .then((x) => {
         console.log(`Connecté à Mongo! Nom de la base: "${x.connections[0].name}"`)
     })
