@@ -1,19 +1,20 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 pseudo">
       <div class="message" *ngFor="let message of data.messageDialog" (click)="this.selected = message">
-        <b>Pseudo</b><br>
-        {{message.winner[0]}}
+        <b >Pseudo</b><br>
+        <p >{{message.winner[0]}}</p>
+
         <mat-divider></mat-divider>
       </div>
     </div>
     <div class="col-md-6 winner">
       <div *ngFor="let winnerMessage of this.selected.winner">
-        <p>{{ winnerMessage }}</p>
+        <p (click)="openVod()">{{ winnerMessage }}</p>
       </div>
     </div>
 </div>
-<div style="margin-left: 30%">
-  <h1>Choisir un morceau</h1>
+<div>
+  <h1>Choisir <br/>un morceau</h1>
   <label for="artiste">Choisir un artiste</label><br>
     <input type="text"
            placeholder="Choisir un artiste"

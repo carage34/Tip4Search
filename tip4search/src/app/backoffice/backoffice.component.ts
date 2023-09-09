@@ -24,12 +24,16 @@ export class BackofficeComponent {
     });
   }
 
-  openDialog(messageDialog: Message[]): void {
+  openDialog(messageDialog: Message[], video: Video): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: {messageDialog},
+      data: {messageDialog: messageDialog, video: video},
+      minWidth: "500",
+      maxHeight: "500"
     });
 
     dialogRef.afterClosed().subscribe(result => {
     });
   }
+
+
 }

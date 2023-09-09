@@ -10,6 +10,7 @@ let Message = new Schema({
         ref: "Video",
     },
     winner:  [String],
+    nickname : String,
     postedAt: Date,
     offsetSeconds: Number,
     done: { type: Boolean, default: false },

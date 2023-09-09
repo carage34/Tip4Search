@@ -5,7 +5,7 @@
         <mat-card-title>Vod du {{ video.postedAt | date : 'short' }}</mat-card-title>
       </mat-card-header>
       <h3 class="text-center">{{ video.messages.length }} messages à traiter</h3>
-      <button class="btn btn-primary mb-3" style="width: 50%; margin-left: 25%" (click)="this.openDialog(video.messages)">Traiter</button>
+      <button class="btn btn-primary mb-3" style="width: 50%; margin-left: 25%" (click)="this.openDialog(video.messages, video)">Traiter</button>
       <!--<mat-card-content class="d-flex flex-row">
         <mat-card class="card" *ngFor="let message of video.messages">
           <div *ngFor="let content of message.winner">

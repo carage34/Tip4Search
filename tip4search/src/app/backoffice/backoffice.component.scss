@@ -22,3 +22,11 @@ mat-card-subtitle {
 h3 {
   color: white;
 }
+
+.mat-mdc-dialog-container {
+  width: 300px !important;
+}
+
+ ::ng-deep .cdk-overlay-pane {
+  width: 500px !important;
+}

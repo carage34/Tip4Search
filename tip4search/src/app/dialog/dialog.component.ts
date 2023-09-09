@@ -36,6 +36,33 @@ export class DialogComponent {
     })
   }
 
+  openVod() {
+    console.log("oui")
+    console.log(this.selected);
+    let date = new Date(this.selected.postedAt);
+    console.log(date.getHours());
+    console.log(date.getMinutes());
+    console.log(date.getSeconds());
+    let time = `${date.getHours()}h${date.getMinutes()}m${date.getSeconds()}s`
+    console.log(this.secondsToHms(this.selected.offsetSeconds));
+    let timeTwitch = this.secondsToHms(this.selected.offsetSeconds);
+    let site = this.data.video.available ? `https://twitch.tv/videos/${this.data.video.twitchid}?t=${timeTwitch}` : `https://youtu.be/${this.data.video.youtubeid}?t=${this.selected.offsetSeconds}`
+    // @ts-ignore
+    window.open(site).focus();
+  }
+
+   secondsToHms(d: number) {
+    d = Number(d);
+    let h = Math.floor(d / 3600);
+    let m = Math.floor(d % 3600 / 60);
+    let s = Math.floor(d % 3600 % 60);
+
+    let hDisplay = h > 0 ? h + (h == 1 ? "h" : "h") : "h";
+    let mDisplay = m > 0 ? m + (m == 1 ? "m" : "m") : "m";
+    let sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "s";
+    return hDisplay + mDisplay + sDisplay;
+  }
+
   artistChanged(value: string | null) {
     this.titre = this.songs.filter(song => song.artist.toLowerCase() === value?.toLowerCase());
     console.log(this.titre);
@@ -67,7 +94,7 @@ export class DialogComponent {
     public dialogRef: MatDialogRef<DialogComponent>,
     public songService: SongService,
     public messageService: MessageService,
-    @Inject(MAT_DIALOG_DATA) public data: {messageDialog: Message[]},
+    @Inject(MAT_DIALOG_DATA) public data: {messageDialog: Message[], video: Video},
   ) {
     console.log(data.messageDialog);
     this.selected = data.messageDialog[0];

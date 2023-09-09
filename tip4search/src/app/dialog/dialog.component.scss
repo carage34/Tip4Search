@@ -9,4 +9,11 @@ h1 {
 
 .winner {
   width: 200px;
+  overflow: scroll;
+  height: 600px;
+}
+
+.pseudo {
+  height: 600px;
+  overflow: scroll;
 }

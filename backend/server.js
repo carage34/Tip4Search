@@ -11,11 +11,11 @@ import { Client, IntentsBitField } from 'discord.js';
 import { readFile } from 'fs/promises';
 const client = new Client({ intents: [IntentsBitField.Flags.Guilds] });
 
-client.login(process.env.TOKEN);
+/*client.login(process.env.TOKEN);
 client.on("ready", () => {
     console.log(`Ready to serve on ${client.guilds.size} servers, for ${client.users.size} users.`);
     client.channels.cache.get(process.env.CHANNEL_ID).send("test");
-});
+});*/
 
 
 // Connexion à mongoDB
